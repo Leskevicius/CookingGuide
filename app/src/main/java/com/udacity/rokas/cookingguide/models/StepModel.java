@@ -17,6 +17,8 @@ public class StepModel implements Parcelable {
     private String videoURL;
     private String thumbnailURL;
 
+    public StepModel() {}
+
     protected StepModel(Parcel in) {
         id = in.readInt();
         shortDescription = in.readString();

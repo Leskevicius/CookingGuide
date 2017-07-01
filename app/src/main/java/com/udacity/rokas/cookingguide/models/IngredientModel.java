@@ -15,6 +15,8 @@ public class IngredientModel implements Parcelable {
     private String measure;
     private String ingredient;
 
+    public IngredientModel() {}
+
     protected IngredientModel(Parcel in) {
         quantity = in.readInt();
         measure = in.readString();

@@ -20,12 +20,14 @@ import java.util.Scanner;
 public class NetworkUtils {
     private static final String LOG_TAG = NetworkUtils.class.getSimpleName();
 
+
+
     /**
      * An HTTP request. Used to make API calls
      *
      * @param url {@link URL} object representing GET request URL
      * @return {@link String} representation of response
-     * @throws {@link IOException}.
+     * @throws {@link IOException}
      */
     public static String getResponseFromHTTPUrl(URL url) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

@@ -20,6 +20,7 @@ public class RecipeModel implements Parcelable {
     private List<IngredientModel> ingredientList;
     private List<StepModel> stepList;
 
+    public RecipeModel() {}
 
     protected RecipeModel(Parcel in) {
         id = in.readInt();
