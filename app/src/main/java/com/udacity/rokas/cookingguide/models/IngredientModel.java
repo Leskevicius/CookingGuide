@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 /**
  * Created by rokas on 7/1/17.
+ *
+ * This model represents the one ingredient in a list of ingredients that are returned by Udacity API
  */
 
 public class IngredientModel implements Parcelable {

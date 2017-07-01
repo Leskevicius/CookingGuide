@@ -7,6 +7,8 @@ import java.util.List;
 
 /**
  * Created by rokas on 7/1/17.
+ *
+ * This model represents a recipe in a list of recipes that are returned by Udacity API
  */
 
 public class RecipeModel implements Parcelable {
