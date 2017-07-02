@@ -33,11 +33,11 @@ public class JSONModelParser {
 
         List<RecipeModel> recipeList = new ArrayList<>();
         try {
-            RecipeModel recipe = new RecipeModel();
             JSONArray recipesJSONArray = new JSONArray(response);
             // loop through the array of recipes, building a RecipeModel
             for (int i = 0; i < recipesJSONArray.length(); i++) {
 
+                RecipeModel recipe = new RecipeModel();
                 JSONObject recipeJSONObject = recipesJSONArray.getJSONObject(i);
                 recipe.setId(recipeJSONObject.getInt("id"));
                 recipe.setName(recipeJSONObject.getString("name"));

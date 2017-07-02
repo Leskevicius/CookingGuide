@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.udacity.rokas.cookingguide.models.RecipeModel;
 import com.udacity.rokas.cookingguide.providers.RecipeProvider;
@@ -27,6 +28,8 @@ import butterknife.ButterKnife;
 public class RecipeListFragment extends Fragment implements RecipeProvider.RecipeProviderListener {
 
     @BindView(R.id.recipe_recycler_view) RecyclerView recipeRecyclerView;
+    @BindView(R.id.recipe_list_loading) ProgressBar progressBar;
+
 
     public static String RECIPES = "recipes";
 
@@ -58,6 +61,7 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
         Bundle args = getArguments();
         List<RecipeModel> recipeList = args.getParcelableArrayList(RECIPES);
         if (recipeList == null) {
+            showProgressBar();
             recipeListAdapter = new RecipeListAdapter();
             RecipeProvider.requestRecipes(this);
 
@@ -73,5 +77,20 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
     @Override
     public void onComplete(List<RecipeModel> recipes) {
         recipeListAdapter.setRecipes(recipes);
+
+        for (int i = 0; i < recipes.size(); i++) {
+            Log.w("rokas: ", recipes.get(i).getName());
+        }
+        showRecipes();
+    }
+
+    private void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+        recipeRecyclerView.setVisibility(View.INVISIBLE);
+    }
+
+    private void showRecipes() {
+        progressBar.setVisibility(View.GONE);
+        recipeRecyclerView.setVisibility(View.VISIBLE);
     }
 }
