@@ -15,7 +15,7 @@ public class RecipeModel implements Parcelable {
 
     private int id;
     private String name;
-    private String servings;
+    private int servings;
     private String image;
     private List<IngredientModel> ingredientList;
     private List<StepModel> stepList;
@@ -25,7 +25,7 @@ public class RecipeModel implements Parcelable {
     protected RecipeModel(Parcel in) {
         id = in.readInt();
         name = in.readString();
-        servings = in.readString();
+        servings = in.readInt();
         image = in.readString();
         in.readList(ingredientList, IngredientModel.class.getClassLoader());
         in.readList(stepList, StepModel.class.getClassLoader());
@@ -35,7 +35,7 @@ public class RecipeModel implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(name);
-        dest.writeString(servings);
+        dest.writeInt(servings);
         dest.writeString(image);
         dest.writeList(ingredientList);
         dest.writeList(stepList);
@@ -74,11 +74,11 @@ public class RecipeModel implements Parcelable {
         this.name = name;
     }
 
-    public String getServings() {
+    public int getServings() {
         return servings;
     }
 
-    public void setServings(String servings) {
+    public void setServings(int servings) {
         this.servings = servings;
     }
 

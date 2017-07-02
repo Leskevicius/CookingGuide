@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="recipe_list_loading_top_margin">12dp</dimen>
+    <dimen name="recipe_list_left_margin">24dp</dimen>
+    <dimen name="recipe_list_right_margin">24dp</dimen>
+    <dimen name="recipe_list_fragment_top_margin">12dp</dimen>
+    <dimen name="recipe_list_horizontal_margin">8dp</dimen>
+    <dimen name="recipe_list_item_text_size">24sp</dimen>
+    <dimen name="recipe_list_item_detail_size">18sp</dimen>
 </resources>

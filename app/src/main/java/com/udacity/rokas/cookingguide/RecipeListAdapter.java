@@ -22,10 +22,11 @@ import butterknife.ButterKnife;
 
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeListAdapterViewHolder> {
 
-    List<RecipeModel> recipes;
+    private List<RecipeModel> recipes;
+    private RecipeOnClickListener listener;
 
-    public RecipeListAdapter() {
-        recipes = new ArrayList<>();
+    public RecipeListAdapter(RecipeOnClickListener listener) {
+        this.listener = listener;
     }
 
     public RecipeListAdapter(List<RecipeModel> recipes) {
@@ -45,7 +46,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     @Override
     public void onBindViewHolder(RecipeListAdapterViewHolder holder, int position) {
         String title = recipes.get(position).getName();
+        String servings = "Servings: " + Integer.toString(recipes.get(position).getServings());
         holder.mRecipeTitle.setText(title);
+        holder.mRecipeDetail.setText(servings);
     }
 
     @Override
@@ -54,14 +57,22 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         else return recipes.size();
     }
 
-    public class RecipeListAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class RecipeListAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.recipe_item_title) public TextView mRecipeTitle;
+        @BindView(R.id.recipe_item_detail) public TextView mRecipeDetail;
 
         public RecipeListAdapterViewHolder(View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            RecipeModel recipe = recipes.get(getAdapterPosition());
+            listener.onClick(recipe);
         }
     }
 
@@ -72,5 +83,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     public void setRecipes(List<RecipeModel> recipes) {
         this.recipes = recipes;
         notifyDataSetChanged();
+    }
+
+    public interface RecipeOnClickListener {
+        void onClick(RecipeModel recipe);
     }
 }

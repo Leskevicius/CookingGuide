@@ -41,6 +41,7 @@ public class JSONModelParser {
                 JSONObject recipeJSONObject = recipesJSONArray.getJSONObject(i);
                 recipe.setId(recipeJSONObject.getInt("id"));
                 recipe.setName(recipeJSONObject.getString("name"));
+                recipe.setServings(recipeJSONObject.getInt("servings"));
                 recipe.setImage(recipeJSONObject.getString("image"));
 
                 JSONArray ingredientJSONArray = recipeJSONObject.getJSONArray("ingredients");

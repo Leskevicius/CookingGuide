@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.udacity.rokas.cookingguide.models.RecipeModel;
 import com.udacity.rokas.cookingguide.providers.RecipeProvider;
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
  * This fragment represents a list of available recipes. It utilized a {@link android.support.v7.widget.RecyclerView}.
  */
 
-public class RecipeListFragment extends Fragment implements RecipeProvider.RecipeProviderListener {
+public class RecipeListFragment extends Fragment implements RecipeProvider.RecipeProviderListener, RecipeListAdapter.RecipeOnClickListener {
 
     @BindView(R.id.recipe_recycler_view) RecyclerView recipeRecyclerView;
     @BindView(R.id.recipe_list_loading) ProgressBar progressBar;
@@ -62,7 +63,7 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
         List<RecipeModel> recipeList = args.getParcelableArrayList(RECIPES);
         if (recipeList == null) {
             showProgressBar();
-            recipeListAdapter = new RecipeListAdapter();
+            recipeListAdapter = new RecipeListAdapter(this);
             RecipeProvider.requestRecipes(this);
 
         } else {
@@ -71,16 +72,17 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
         recipeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recipeRecyclerView.setAdapter(recipeListAdapter);
 
+        // set up appbar
+        if (getActivity() instanceof RecipeListActivity) {
+            ((RecipeListActivity) getActivity()).setAppBarTitle(getString(R.string.recipe_list_app_bar_title));
+        }
+
         return view;
     }
 
     @Override
     public void onComplete(List<RecipeModel> recipes) {
         recipeListAdapter.setRecipes(recipes);
-
-        for (int i = 0; i < recipes.size(); i++) {
-            Log.w("rokas: ", recipes.get(i).getName());
-        }
         showRecipes();
     }
 
@@ -92,5 +94,10 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
     private void showRecipes() {
         progressBar.setVisibility(View.GONE);
         recipeRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onClick(RecipeModel recipe) {
+
     }
 }
