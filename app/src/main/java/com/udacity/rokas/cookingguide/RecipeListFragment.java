@@ -5,11 +5,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.udacity.rokas.cookingguide.models.RecipeModel;
+import com.udacity.rokas.cookingguide.providers.RecipeProvider;
 
 import java.util.List;
 
@@ -22,11 +24,9 @@ import butterknife.ButterKnife;
  * This fragment represents a list of available recipes. It utilized a {@link android.support.v7.widget.RecyclerView}.
  */
 
-public class RecipeListFragment extends Fragment {
+public class RecipeListFragment extends Fragment implements RecipeProvider.RecipeProviderListener {
 
     public static String RECIPES = "recipes";
-
-    @BindView(R.id.recipe_recycler_view) private RecyclerView recipeRecyclerView;
 
     private RecipeListAdapter recipeListAdapter;
 
@@ -42,7 +42,7 @@ public class RecipeListFragment extends Fragment {
      * @param bundle object to hold all information required by {@link RecipeListFragment}.
      * @return new instance of {@link RecipeListFragment}.
      */
-    public RecipeListFragment newInstance(Bundle bundle) {
+    public static RecipeListFragment newInstance(Bundle bundle) {
         RecipeListFragment recipeListFragment = new RecipeListFragment();
         recipeListFragment.setArguments(bundle);
         return recipeListFragment;
@@ -51,14 +51,24 @@ public class RecipeListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ButterKnife.bind(getActivity());
-
+        RecyclerView recipeRecyclerView = (RecyclerView) inflater.inflate(R.layout.recipe_list_fragment, container, false);
         Bundle args = getArguments();
         List<RecipeModel> recipeList = args.getParcelableArrayList(RECIPES);
-        recipeListAdapter = new RecipeListAdapter(recipeList);
+        if (recipeList == null) {
+            recipeListAdapter = new RecipeListAdapter();
+            RecipeProvider.requestRecipes(this);
+
+        } else {
+            recipeListAdapter = new RecipeListAdapter(recipeList);
+        }
         recipeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recipeRecyclerView.setAdapter(recipeListAdapter);
 
         return recipeRecyclerView;
+    }
+
+    @Override
+    public void onComplete(List<RecipeModel> recipes) {
+        recipeListAdapter.setRecipes(recipes);
     }
 }
