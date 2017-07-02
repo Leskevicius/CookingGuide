@@ -14,10 +14,12 @@ public class RecipeListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_list);
 
         // start up the recipe list fragment
-        RecipeListFragment fragment = RecipeListFragment.newInstance(new Bundle());
-        getSupportFragmentManager().beginTransaction()
-            .add(R.id.recipe_list_container, fragment)
-            .commit();
+        if (savedInstanceState == null) {
+            RecipeListFragment fragment = RecipeListFragment.newInstance(new Bundle());
+            getSupportFragmentManager().beginTransaction()
+                .add(R.id.recipe_list_container, fragment)
+                .commit();
+        }
 
     }
 

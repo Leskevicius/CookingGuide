@@ -1,6 +1,7 @@
 package com.udacity.rokas.cookingguide;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.udacity.rokas.cookingguide.models.RecipeModel;
 import com.udacity.rokas.cookingguide.providers.RecipeProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -32,9 +34,11 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
     @BindView(R.id.recipe_list_loading) ProgressBar progressBar;
 
 
-    public static String RECIPES = "recipes";
+    public static final String RECIPES = "recipes";
+    public static final String RECIPE = "recipe";
 
     private RecipeListAdapter recipeListAdapter;
+    private List<RecipeModel> recipeList;
 
     /**
      * Mandatory empty constructor for fragment manager.
@@ -60,7 +64,11 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
         View view = inflater.inflate(R.layout.recipe_list_fragment, container, false);
         ButterKnife.bind(this, view);
         Bundle args = getArguments();
-        List<RecipeModel> recipeList = args.getParcelableArrayList(RECIPES);
+        if (savedInstanceState != null) {
+            recipeList = savedInstanceState.getParcelableArrayList(RECIPES);
+        } else {
+            recipeList = args.getParcelableArrayList(RECIPES);
+        }
         if (recipeList == null) {
             showProgressBar();
             recipeListAdapter = new RecipeListAdapter(this);
@@ -82,7 +90,8 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
 
     @Override
     public void onComplete(List<RecipeModel> recipes) {
-        recipeListAdapter.setRecipes(recipes);
+        recipeList = recipes;
+        recipeListAdapter.setRecipes(recipeList);
         showRecipes();
     }
 
@@ -97,7 +106,16 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
     }
 
     @Override
-    public void onClick(RecipeModel recipe) {
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (recipeList != null) {
+            outState.putParcelableArrayList(RECIPES, new ArrayList<>(recipeList));
+        }
+    }
 
+    @Override
+    public void onClick(RecipeModel recipe) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(RECIPE, recipe);
     }
 }
