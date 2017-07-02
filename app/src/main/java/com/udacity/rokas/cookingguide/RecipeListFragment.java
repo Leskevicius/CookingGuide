@@ -26,6 +26,8 @@ import butterknife.ButterKnife;
 
 public class RecipeListFragment extends Fragment implements RecipeProvider.RecipeProviderListener {
 
+    @BindView(R.id.recipe_recycler_view) RecyclerView recipeRecyclerView;
+
     public static String RECIPES = "recipes";
 
     private RecipeListAdapter recipeListAdapter;
@@ -51,7 +53,8 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        RecyclerView recipeRecyclerView = (RecyclerView) inflater.inflate(R.layout.recipe_list_fragment, container, false);
+        View view = inflater.inflate(R.layout.recipe_list_fragment, container, false);
+        ButterKnife.bind(this, view);
         Bundle args = getArguments();
         List<RecipeModel> recipeList = args.getParcelableArrayList(RECIPES);
         if (recipeList == null) {
@@ -64,7 +67,7 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
         recipeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recipeRecyclerView.setAdapter(recipeListAdapter);
 
-        return recipeRecyclerView;
+        return view;
     }
 
     @Override

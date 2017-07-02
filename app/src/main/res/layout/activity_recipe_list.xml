@@ -8,12 +8,13 @@
     android:layout_height="match_parent"
     tools:context="com.udacity.rokas.cookingguide.RecipeListActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        />
-    
+    <ProgressBar
+            android:id="@+id/recipe_list_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/recipe_list_loading_top_margin"
+            android:visibility="gone"/>
+
     <FrameLayout
             android:id="@+id/recipe_list_container"
             android:layout_width="match_parent"
