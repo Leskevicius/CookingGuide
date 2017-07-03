@@ -46,9 +46,13 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsStep
         View view = inflater.inflate(R.layout.recipe_details_fragment, container, false);
         ButterKnife.bind(this, view);
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            recipe = bundle.getParcelable(RecipeListFragment.RECIPE);
+        if (savedInstanceState != null) {
+            recipe = savedInstanceState.getParcelable(RecipeListFragment.RECIPE);
+        } else {
+            Bundle bundle = getArguments();
+            if (bundle != null) {
+                recipe = bundle.getParcelable(RecipeListFragment.RECIPE);
+            }
         }
 
         if (recipe != null) {
@@ -68,6 +72,14 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsStep
         }
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (recipe != null) {
+            outState.putParcelable(RecipeListFragment.RECIPE, recipe);
+        }
     }
 
     private void setAppBarTitle(String title) {

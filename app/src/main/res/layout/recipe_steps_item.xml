@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
+
+    <View
+            android:id="@+id/recipe_details_steps_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightGray"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="12dp"/>
 
     <TextView
             android:id="@+id/recipe_details_steps_description"
@@ -10,13 +21,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="Roboto-Condensed"
             android:textSize="@dimen/recipe_list_item_detail_size"
-            android:textAlignment="center"/>
+            android:layout_marginStart="@dimen/recipe_fragment_left_margin"
+            android:layout_marginEnd="@dimen/recipe_fragment_right_margin"/>
 
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/lightGray"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"/>
 
 </LinearLayout>

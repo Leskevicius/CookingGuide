@@ -48,6 +48,10 @@ public class RecipeDetailsStepsAdapter extends RecyclerView.Adapter<RecipeDetail
     public void onBindViewHolder(RecipeDetailsAdapterViewHolder holder, int position) {
         String shortDescription = steps.get(position).getShortDescription();
         holder.recipeStepDetails.setText(shortDescription);
+
+        if (position == 0) {
+            holder.divider.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -59,6 +63,7 @@ public class RecipeDetailsStepsAdapter extends RecyclerView.Adapter<RecipeDetail
     public class RecipeDetailsAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.recipe_details_steps_description) public TextView recipeStepDetails;
+        @BindView(R.id.recipe_details_steps_divider) public View divider;
 
         public RecipeDetailsAdapterViewHolder(View itemView) {
             super(itemView);
