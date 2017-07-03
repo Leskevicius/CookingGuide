@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v4.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:isScrollContainer="true">
+    <LinearLayout
+
+            android:id="@+id/recipe_details_fragment"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/recipe_fragment_left_margin"
+            android:layout_marginEnd="@dimen/recipe_fragment_right_margin"
+            android:layout_marginTop="@dimen/recipe_fragment_top_margin"
+            android:paddingBottom="24dp">
+
+        <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="4dp"
+                app:cardUseCompatPadding="true">
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="12dp">
+
+                <TextView
+                        android:id="@+id/recipe_details_ingredients_title"
+                        android:paddingTop="12dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/recipe_details_ingredients_title"
+                        android:fontFamily="Roboto-Condensed"
+                        android:textAlignment="center"
+                        android:text="@string/recipe_details_ingredients_title"
+                        android:paddingBottom="12dp"
+                        android:background="@color/colorPrimaryLight"
+                />
+
+                <TextView
+                        android:id="@+id/recipe_details_ingredients"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="Roboto-Condensed"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginTop="12dp"
+                        android:lineSpacingMultiplier="1.5"
+                />
+                <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/lightGray"-->
+                <!--android:layout_marginStart="24dp"-->
+                <!--android:layout_marginEnd="24dp"/>-->
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/recipe_list_horizontal_margin"
+                app:cardCornerRadius="4dp"
+                app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="12dp">
+
+
+                <TextView
+                        android:id="@+id/recipe_details_steps_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/recipe_details_ingredients_title"
+                        android:fontFamily="Roboto-Condensed"
+                        android:textAlignment="center"
+                        android:text="@string/recipe_details_steps_title"
+                        android:paddingBottom="12dp"
+                        android:paddingTop="12dp"
+                        android:background="@color/colorPrimaryLight"/>
+
+                <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recipe_details_steps_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

@@ -5,7 +5,8 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="@dimen/recipe_list_fragment_top_margin">
+        android:layout_marginTop="@dimen/recipe_fragment_top_margin"
+        android:layout_marginBottom="@dimen/recipe_fragment_top_margin">
 
     <ProgressBar
             android:id="@+id/recipe_list_loading"
