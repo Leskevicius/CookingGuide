@@ -48,6 +48,8 @@ public class RecipeProvider {
                     Log.w(TAG, e.toString());
                 }
 
+                Log.w("rokas: ", response);
+
                 recipes = JSONModelParser.parseRecipeModels(response);
                 return null;
             }

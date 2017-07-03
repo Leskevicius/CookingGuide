@@ -1,5 +1,7 @@
 package com.udacity.rokas.cookingguide;
 
+import android.support.annotation.IdRes;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,5 +30,14 @@ public class RecipeListActivity extends AppCompatActivity {
         if (appBar != null) {
             appBar.setTitle(title);
         }
+    }
+
+    public void addFragment(Fragment fragment, @IdRes int containerView, String TAG, Fragment previousFragment) {
+        getSupportFragmentManager().beginTransaction()
+            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out)
+            .add(containerView, fragment)
+            .hide(previousFragment)
+            .addToBackStack(TAG)
+            .commit();
     }
 }

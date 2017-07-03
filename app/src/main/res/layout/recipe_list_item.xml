@@ -5,8 +5,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/recipe_list_left_margin"
-        android:layout_marginEnd="@dimen/recipe_list_right_margin"
+        android:layout_marginStart="@dimen/recipe_fragment_left_margin"
+        android:layout_marginEnd="@dimen/recipe_fragment_right_margin"
         android:layout_marginTop="@dimen/recipe_list_horizontal_margin">
 
     <android.support.v7.widget.CardView

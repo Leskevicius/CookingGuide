@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.udacity.rokas.cookingguide.models.RecipeModel;
 import com.udacity.rokas.cookingguide.providers.RecipeProvider;
+import com.udacity.rokas.cookingguide.recipeDetails.RecipeDetailsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
 
     private RecipeListAdapter recipeListAdapter;
     private List<RecipeModel> recipeList;
+    private boolean onClickEnabled = true;
 
     /**
      * Mandatory empty constructor for fragment manager.
@@ -75,17 +77,25 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
             RecipeProvider.requestRecipes(this);
 
         } else {
-            recipeListAdapter = new RecipeListAdapter(recipeList);
+            recipeListAdapter = new RecipeListAdapter(this, recipeList);
         }
         recipeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recipeRecyclerView.setAdapter(recipeListAdapter);
 
         // set up appbar
-        if (getActivity() instanceof RecipeListActivity) {
-            ((RecipeListActivity) getActivity()).setAppBarTitle(getString(R.string.recipe_list_app_bar_title));
-        }
+        setAppBarTitle(getString(R.string.recipe_list_app_bar_title));
+
 
         return view;
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            onClickEnabled = true;
+            setAppBarTitle(getString(R.string.recipe_list_app_bar_title));
+        }
     }
 
     @Override
@@ -113,9 +123,22 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
         }
     }
 
+    private void setAppBarTitle(String title) {
+        if (getActivity() instanceof RecipeListActivity) {
+            ((RecipeListActivity) getActivity()).setAppBarTitle(title);
+        }
+    }
+
     @Override
     public void onClick(RecipeModel recipe) {
+        if (!onClickEnabled) return;
         Bundle bundle = new Bundle();
         bundle.putParcelable(RECIPE, recipe);
+        RecipeDetailsFragment fragment = RecipeDetailsFragment.newInstance(bundle);
+        if (getActivity() instanceof RecipeListActivity) {
+            ((RecipeListActivity) getActivity()).addFragment(fragment, R.id.recipe_list_container,
+                RecipeListFragment.class.getCanonicalName(), this);
+            onClickEnabled = false;
+        }
     }
 }
