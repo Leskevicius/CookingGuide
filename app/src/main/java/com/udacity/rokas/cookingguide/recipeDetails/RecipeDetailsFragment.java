@@ -16,6 +16,7 @@ import com.udacity.rokas.cookingguide.RecipeListFragment;
 import com.udacity.rokas.cookingguide.models.IngredientModel;
 import com.udacity.rokas.cookingguide.models.RecipeModel;
 import com.udacity.rokas.cookingguide.models.StepModel;
+import com.udacity.rokas.cookingguide.recipeStep.RecipeStepFragment;
 import com.udacity.rokas.cookingguide.utilities.TextUtils;
 
 import java.util.List;
@@ -27,7 +28,11 @@ import butterknife.ButterKnife;
  * Created by rokas on 7/1/17.
  */
 
-public class RecipeDetailsFragment extends Fragment implements RecipeDetailsStepsAdapter.RecipeStepOnClickListener{
+public class RecipeDetailsFragment extends Fragment implements RecipeDetailsStepsAdapter.RecipeStepOnClickListener {
+
+    public static final String TAG = RecipeDetailsFragment.class.getCanonicalName();
+
+    public static final String STEP = "step";
 
     @BindView(R.id.recipe_details_ingredients) TextView ingredientsView;
     @BindView(R.id.recipe_details_steps_recycler_view) RecyclerView stepsRecyclerView;
@@ -85,11 +90,29 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsStep
     private void setAppBarTitle(String title) {
         if (getActivity() instanceof RecipeListActivity) {
             ((RecipeListActivity) getActivity()).setAppBarTitle(title);
+            ((RecipeListActivity) getActivity()).setUpAppBarBackButton(true);
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            setAppBarTitle(recipe.getName());
         }
     }
 
     @Override
     public void onClick(StepModel step) {
-        // step clicked!
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(RecipeDetailsFragment.STEP, step);
+        bundle.putParcelable(RecipeListFragment.RECIPE, recipe);
+        RecipeStepFragment fragment = RecipeStepFragment.newInstance(bundle);
+        if (getActivity() instanceof RecipeListActivity) {
+            ((RecipeListActivity) getActivity()).addFragment(fragment, R.id.recipe_fragment_container,
+                RecipeStepFragment.TAG);
+        }
     }
+
+
 }

@@ -9,7 +9,7 @@
     tools:context="com.udacity.rokas.cookingguide.RecipeListActivity">
 
     <FrameLayout
-            android:id="@+id/recipe_list_container"
+            android:id="@+id/recipe_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

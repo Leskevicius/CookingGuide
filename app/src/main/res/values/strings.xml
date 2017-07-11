@@ -3,4 +3,8 @@
     <string name="recipe_list_app_bar_title">Baking Time</string>
     <string name="recipe_details_ingredients_title">Ingredients</string>
     <string name="recipe_details_steps_title">Steps</string>
+    <string name="recipe_step_title">Instructions</string>
+
+    <string name="recipe_step_previous">PREVIOUS</string>
+    <string name="recipe_step_next">NEXT</string>
 </resources>
