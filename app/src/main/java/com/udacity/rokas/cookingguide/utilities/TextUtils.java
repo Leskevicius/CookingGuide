@@ -1,6 +1,7 @@
 package com.udacity.rokas.cookingguide.utilities;
 
 import com.udacity.rokas.cookingguide.models.IngredientModel;
+import com.udacity.rokas.cookingguide.models.StepModel;
 
 import java.util.List;
 
@@ -20,6 +21,13 @@ public class TextUtils {
             }
         }
 
+        return sb.toString();
+    }
+
+    public static String getStepTitle(StepModel step) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Step ");
+        sb.append(step.getId());
         return sb.toString();
     }
 

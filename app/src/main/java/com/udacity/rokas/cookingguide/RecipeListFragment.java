@@ -1,17 +1,14 @@
 package com.udacity.rokas.cookingguide;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.udacity.rokas.cookingguide.models.RecipeModel;
 import com.udacity.rokas.cookingguide.providers.RecipeProvider;
@@ -40,7 +37,6 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
 
     private RecipeListAdapter recipeListAdapter;
     private List<RecipeModel> recipeList;
-    private boolean onClickEnabled = true;
 
     /**
      * Mandatory empty constructor for fragment manager.
@@ -88,15 +84,15 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
 
         return view;
     }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden) {
-            onClickEnabled = true;
-            setAppBarTitle(getString(R.string.recipe_list_app_bar_title));
-        }
-    }
+//
+//    @Override
+//    public void onHiddenChanged(boolean hidden) {
+//        super.onHiddenChanged(hidden);
+//        if (!hidden) {
+//            onClickEnabled = true;
+//            setAppBarTitle(getString(R.string.recipe_list_app_bar_title));
+//        }
+//    }
 
     @Override
     public void onComplete(List<RecipeModel> recipes) {
@@ -131,14 +127,12 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
 
     @Override
     public void onClick(RecipeModel recipe) {
-        if (!onClickEnabled) return;
         Bundle bundle = new Bundle();
         bundle.putParcelable(RECIPE, recipe);
         RecipeDetailsFragment fragment = RecipeDetailsFragment.newInstance(bundle);
         if (getActivity() instanceof RecipeListActivity) {
-            ((RecipeListActivity) getActivity()).addFragment(fragment, R.id.recipe_list_container,
-                RecipeListFragment.class.getCanonicalName(), this);
-            onClickEnabled = false;
+            ((RecipeListActivity) getActivity()).addFragment(fragment, R.id.recipe_fragment_container,
+                RecipeDetailsFragment.TAG);
         }
     }
 }

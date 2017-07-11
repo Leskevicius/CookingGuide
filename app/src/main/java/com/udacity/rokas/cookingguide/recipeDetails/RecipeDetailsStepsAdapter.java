@@ -74,7 +74,7 @@ public class RecipeDetailsStepsAdapter extends RecyclerView.Adapter<RecipeDetail
 
         @Override
         public void onClick(View v) {
-            // launch new fragment with step description
+            listener.onClick(steps.get(getAdapterPosition()));
         }
     }
 

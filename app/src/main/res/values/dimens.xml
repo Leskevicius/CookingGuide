@@ -9,4 +9,7 @@
     <dimen name="recipe_list_item_detail_size">18sp</dimen>
 
     <dimen name="recipe_details_ingredients_title">24sp</dimen>
+
+    <dimen name="recipe_step_card_vertical_margin">12dp</dimen>
+    <dimen name="recipe_step_title">24sp</dimen>
 </resources>
