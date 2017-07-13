@@ -11,6 +11,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.udacity.rokas.cookingguide.R;
 import com.udacity.rokas.cookingguide.RecipeListActivity;
@@ -40,13 +42,22 @@ public class RecipeStepFragment extends Fragment {
 
     public static final String TAG = RecipeStepFragment.class.getCanonicalName();
 
-    @BindView(R.id.player_view) SimpleExoPlayerView playerView;
-    @BindView(R.id.recipe_step_details) TextView stepDetailsView;
-    @BindView(R.id.recipe_step_previous) Button previousButton;
-    @BindView(R.id.recipe_step_next) Button nextButton;
+    @BindView(R.id.player_view)
+    SimpleExoPlayerView playerView;
+
+    @BindView(R.id.recipe_step_details)
+    TextView stepDetailsView;
+
+    @BindView(R.id.recipe_step_previous)
+    Button previousButton;
+
+    @BindView(R.id.recipe_step_next)
+    Button nextButton;
 
     private SimpleExoPlayer player;
+
     private StepModel step;
+
     private RecipeModel recipe;
 
     public static RecipeStepFragment newInstance(Bundle bundle) {
@@ -74,6 +85,16 @@ public class RecipeStepFragment extends Fragment {
 
         } else {
             // do something
+        }
+
+        // in landscape mode.
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }
 
         if (step != null) {
@@ -173,14 +194,4 @@ public class RecipeStepFragment extends Fragment {
             player = null;
         }
     }
-    //    for portrait mode
-//    @SuppressLint("InlinedApi")
-//    private void hideSystemUi() {
-//        playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-//            | View.SYSTEM_UI_FLAG_FULLSCREEN
-//            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-//            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-//    }
 }
