@@ -7,6 +7,7 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                  android:id="@+id/recipe_steps_container"
                   android:orientation="vertical"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content">
@@ -14,9 +15,11 @@
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
                 android:id="@+id/player_view"
                 android:layout_width="match_parent"
-                android:layout_height="256dp"/>
+                android:layout_height="256dp"
+                android:background="@android:color/black"/>
 
         <android.support.v7.widget.CardView
+                android:id="@+id/recipe_step_button_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="4dp"

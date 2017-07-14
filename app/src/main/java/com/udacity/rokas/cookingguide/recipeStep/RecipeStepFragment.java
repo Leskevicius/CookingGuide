@@ -16,11 +16,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ import com.udacity.rokas.cookingguide.recipeDetails.RecipeDetailsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Optional;
 
 /**
  * Created by rokas on 7/3/17.
@@ -45,14 +48,18 @@ public class RecipeStepFragment extends Fragment {
     @BindView(R.id.player_view)
     SimpleExoPlayerView playerView;
 
-    @BindView(R.id.recipe_step_details)
+    // These are nullable so I allow for ButterKnife to work when I don't actually need these elements (landscape)
+    @Nullable @BindView(R.id.recipe_step_details)
     TextView stepDetailsView;
 
-    @BindView(R.id.recipe_step_previous)
+    @Nullable @BindView(R.id.recipe_step_previous)
     Button previousButton;
 
-    @BindView(R.id.recipe_step_next)
+    @Nullable @BindView(R.id.recipe_step_next)
     Button nextButton;
+
+    @Nullable @BindView(R.id.recipe_step_button_container)
+    CardView buttonContainer;
 
     private SimpleExoPlayer player;
 
@@ -69,8 +76,7 @@ public class RecipeStepFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.recipe_steps_fragment, container, false);
-        ButterKnife.bind(this, view);
+        View view;
 
         Bundle bundle = getArguments();
 
@@ -89,22 +95,27 @@ public class RecipeStepFragment extends Fragment {
 
         // in landscape mode.
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            view = inflater.inflate(R.layout.recipe_steps_fragment_landscape, container, false);
+            ButterKnife.bind(this, view);
+
             playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        }
+        } else {
+            view = inflater.inflate(R.layout.recipe_steps_fragment, container, false);
+            ButterKnife.bind(this, view);
 
-        if (step != null) {
-            setAppBarTitle(com.udacity.rokas.cookingguide.utilities.TextUtils.getStepTitle(step));
-            stepDetailsView.setText(step.getDescription());
-            initializePlayer();
-
-            // set up the buttons
-            setupButtons();
+            if (step != null) {
+                setAppBarTitle(com.udacity.rokas.cookingguide.utilities.TextUtils.getStepTitle(step));
+                stepDetailsView.setText(step.getDescription());
+                // set up the buttons
+                setupButtons();
+            }
         }
+        initializePlayer();
 
         return view;
     }
