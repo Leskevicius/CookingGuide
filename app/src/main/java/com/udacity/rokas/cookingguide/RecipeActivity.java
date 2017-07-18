@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.udacity.rokas.cookingguide.models.RecipeModel;
 import com.udacity.rokas.cookingguide.recipeDetails.RecipeDetailsFragment;
+import com.udacity.rokas.cookingguide.recipeStep.RecipeStepFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,10 +35,14 @@ public class RecipeActivity extends AppCompatActivity {
 
     private RecipeModel recipe;
 
+    private boolean isTablet;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+
+        isTablet = getResources().getBoolean(R.bool.isTablet);
 
         ButterKnife.bind(this);
 
@@ -45,11 +50,8 @@ public class RecipeActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        if (savedInstanceState != null) {
-
-            if (savedInstanceState.containsKey(RecipeListFragment.RECIPE)) {
-                recipe = savedInstanceState.getParcelable(RecipeListFragment.RECIPE);
-            }
+        if (savedInstanceState != null && savedInstanceState.containsKey(RecipeListFragment.RECIPE)) {
+            recipe = savedInstanceState.getParcelable(RecipeListFragment.RECIPE);
         }
 
         if (getSupportFragmentManager().findFragmentById(R.id.recipe_details_fragment_container) == null) {
@@ -57,17 +59,37 @@ public class RecipeActivity extends AppCompatActivity {
             Intent intent = getIntent();
             if (intent.hasExtra(RecipeListFragment.RECIPE)) {
                 recipe = intent.getParcelableExtra(RecipeListFragment.RECIPE);
-                setAppBarTitle(recipe.getName());
             }
 
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(RecipeListFragment.RECIPE, recipe);
+            if (isTablet) {
+                Bundle detailsFragmentBundle = new Bundle();
+                Bundle stepFragmentBundle = new Bundle();
+                detailsFragmentBundle.putParcelable(RecipeListFragment.RECIPE, recipe);
+                stepFragmentBundle.putParcelable(RecipeListFragment.RECIPE, recipe);
+                stepFragmentBundle.putParcelable(RecipeDetailsFragment.STEP, recipe.getStepList().get(0));
 
-            RecipeDetailsFragment fragment = RecipeDetailsFragment.newInstance(bundle);
+                RecipeDetailsFragment detailsFragment = RecipeDetailsFragment.newInstance(detailsFragmentBundle);
+                RecipeStepFragment stepFragment = RecipeStepFragment.newInstance(stepFragmentBundle);
 
-            getSupportFragmentManager().beginTransaction()
-                .add(R.id.recipe_details_fragment_container, fragment)
-                .commit();
+                getSupportFragmentManager().beginTransaction()
+                    .add(R.id.recipe_details_fragment_container, detailsFragment)
+                    .add(R.id.recipe_step_fragment_container, stepFragment)
+                    .commit();
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(RecipeListFragment.RECIPE, recipe);
+
+                RecipeDetailsFragment fragment = RecipeDetailsFragment.newInstance(bundle);
+
+                getSupportFragmentManager().beginTransaction()
+                    .add(R.id.recipe_details_fragment_container, fragment)
+                    .commit();
+
+                setAppBarTitle(recipe.getName());
+
+                showDetails();
+            }
+
         }
 
         String deviceType = getResources().getBoolean(R.bool.isTablet) ? "Tablet" : "Phone";
@@ -85,7 +107,7 @@ public class RecipeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: {
-                if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                if (getSupportFragmentManager().getBackStackEntryCount() == 0 || isTablet) {
                     finish();
                 } else {
                     getSupportFragmentManager().popBackStack();
@@ -132,7 +154,11 @@ public class RecipeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        setAppBarTitle(recipe.getName());
-        showDetails();
+        if (isTablet) {
+            finish();
+        } else {
+            setAppBarTitle(recipe.getName());
+            showDetails();
+        }
     }
 }

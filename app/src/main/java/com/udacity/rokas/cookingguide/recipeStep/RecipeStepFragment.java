@@ -50,19 +50,24 @@ public class RecipeStepFragment extends Fragment {
     SimpleExoPlayerView playerView;
 
     // These are nullable so I allow for ButterKnife to work when I don't actually need these elements (landscape)
-    @Nullable @BindView(R.id.recipe_step_details)
+    @Nullable
+    @BindView(R.id.recipe_step_details)
     TextView stepDetailsView;
 
-    @Nullable @BindView(R.id.recipe_step_previous)
+    @Nullable
+    @BindView(R.id.recipe_step_previous)
     Button previousButton;
 
-    @Nullable @BindView(R.id.recipe_step_next)
+    @Nullable
+    @BindView(R.id.recipe_step_next)
     Button nextButton;
 
-    @Nullable @BindView(R.id.recipe_step_button_container)
+    @Nullable
+    @BindView(R.id.recipe_step_button_container)
     CardView buttonContainer;
 
-    @Nullable @BindView(R.id.recipe_step_landscape_no_video)
+    @Nullable
+    @BindView(R.id.recipe_step_landscape_no_video)
     TextView noVideoText;
 
     private SimpleExoPlayer player;
@@ -70,6 +75,8 @@ public class RecipeStepFragment extends Fragment {
     private StepModel step;
 
     private RecipeModel recipe;
+
+    private boolean isTablet;
 
     public static RecipeStepFragment newInstance(Bundle bundle) {
         RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
@@ -81,6 +88,8 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view;
+
+        isTablet = getResources().getBoolean(R.bool.isTablet);
 
         Bundle bundle = getArguments();
 
@@ -98,7 +107,7 @@ public class RecipeStepFragment extends Fragment {
         }
 
         // in landscape mode.
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && !isTablet) {
             view = inflater.inflate(R.layout.recipe_steps_fragment_landscape, container, false);
             ButterKnife.bind(this, view);
 
@@ -117,21 +126,25 @@ public class RecipeStepFragment extends Fragment {
                 initializePlayer();
             }
 
+            showStep();
+
         } else {
             view = inflater.inflate(R.layout.recipe_steps_fragment, container, false);
             ButterKnife.bind(this, view);
 
             if (step != null) {
-                setAppBarTitle(com.udacity.rokas.cookingguide.utilities.TextUtils.getStepTitle(step));
                 stepDetailsView.setText(step.getDescription());
                 // set up the buttons
                 setupButtons();
             }
 
             initializePlayer();
-        }
 
-        showStep();
+            if (!isTablet) {
+                setAppBarTitle(com.udacity.rokas.cookingguide.utilities.TextUtils.getStepTitle(step));
+                showStep();
+            }
+        }
 
         return view;
     }
@@ -153,7 +166,7 @@ public class RecipeStepFragment extends Fragment {
     }
 
     private void setupButtons() {
-        if (step.getId() >= recipe.getIngredientList().size()) {
+        if (step.getId() >= recipe.getStepList().size() - 1) {
             nextButton.setEnabled(false);
         } else if (step.getId() <= 0) {
             previousButton.setEnabled(false);

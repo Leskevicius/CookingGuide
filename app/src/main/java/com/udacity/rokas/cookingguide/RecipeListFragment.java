@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,6 +40,8 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
     private RecipeListAdapter recipeListAdapter;
     private List<RecipeModel> recipeList;
 
+    private boolean isTablet;
+
     /**
      * Mandatory empty constructor for fragment manager.
      */
@@ -61,6 +64,9 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recipe_list_fragment, container, false);
+
+        isTablet = getResources().getBoolean(R.bool.isTablet);
+
         ButterKnife.bind(this, view);
         Bundle args = getArguments();
         if (savedInstanceState != null) {
@@ -76,7 +82,12 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
         } else {
             recipeListAdapter = new RecipeListAdapter(this, recipeList);
         }
-        recipeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        if (isTablet) {
+            recipeRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        } else {
+            recipeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        }
+
         recipeRecyclerView.setAdapter(recipeListAdapter);
 
         return view;

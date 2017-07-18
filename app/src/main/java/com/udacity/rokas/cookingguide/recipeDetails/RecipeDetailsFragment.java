@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.udacity.rokas.cookingguide.R;
@@ -20,6 +22,7 @@ import com.udacity.rokas.cookingguide.models.StepModel;
 import com.udacity.rokas.cookingguide.recipeStep.RecipeStepFragment;
 import com.udacity.rokas.cookingguide.utilities.TextUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,14 +32,17 @@ import butterknife.ButterKnife;
  * Created by rokas on 7/1/17.
  */
 
-public class RecipeDetailsFragment extends Fragment implements RecipeDetailsStepsAdapter.RecipeStepOnClickListener {
+public class RecipeDetailsFragment extends Fragment {
 
     public static final String TAG = RecipeDetailsFragment.class.getCanonicalName();
 
     public static final String STEP = "step";
 
-    @BindView(R.id.recipe_details_ingredients) TextView ingredientsView;
-    @BindView(R.id.recipe_details_steps_recycler_view) RecyclerView stepsRecyclerView;
+    @BindView(R.id.recipe_details_ingredients)
+    TextView ingredientsView;
+
+    @BindView(R.id.recipe_details_steps_list)
+    LinearLayout stepsList;
 
     private RecipeModel recipe;
 
@@ -73,14 +79,29 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsStep
             setAppBarTitle(recipe.getName());
 
             // set up the recycler view
-            RecipeDetailsStepsAdapter adapter = new RecipeDetailsStepsAdapter(this, recipe.getStepList());
-            stepsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-            stepsRecyclerView.setAdapter(adapter);
-            stepsRecyclerView.setNestedScrollingEnabled(false);
+//            RecipeDetailsAdapter adapter = new RecipeDetailsAdapter(new ArrayList<>(recipe.getStepList()), getContext(), this);
+//            stepsListView.setAdapter(adapter);
+            for (int i = 0; i < recipe.getStepList().size(); i++) {
+                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+                View stepItem = layoutInflater.inflate(R.layout.recipe_steps_item, container, false);
+                TextView stepDescriptionView = (TextView) stepItem.findViewById(R.id.recipe_details_steps_description);
+                stepDescriptionView.setText(recipe.getStepList().get(i).getShortDescription());
+                if (i == 0) {
+                    View horizonalRule = stepItem.findViewById(R.id.recipe_details_steps_divider);
+                    horizonalRule.setVisibility(View.GONE);
+                }
+
+                final int position = i;
+                stepItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onStepClick(recipe.getStepList().get(position));
+                    }
+                });
+
+                stepsList.addView(stepItem);
+            }
         }
-
-        showDetails();
-
         return view;
     }
 
@@ -107,8 +128,7 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsStep
         }
     }
 
-    @Override
-    public void onClick(StepModel step) {
+    public void onStepClick(StepModel step) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(RecipeDetailsFragment.STEP, step);
         bundle.putParcelable(RecipeListFragment.RECIPE, recipe);
@@ -119,11 +139,5 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsStep
 
         }
 
-    }
-
-    private void showDetails() {
-        if (getActivity() instanceof RecipeActivity) {
-            ((RecipeActivity) getActivity()).showDetails();
-        }
     }
 }
