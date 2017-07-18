@@ -43,24 +43,6 @@ public class RecipeListActivity extends AppCompatActivity {
         }
     }
 
-    public void addFragment(Fragment fragment, @IdRes int containerView, String TAG) {
-
-        getSupportFragmentManager().beginTransaction()
-            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out)
-            .replace(containerView, fragment, TAG)
-            .addToBackStack(TAG)
-            .commit();
-    }
-
-    public void replaceFragment(Fragment newFragment, @IdRes int containerId, String TAG, Fragment oldFragment) {
-        getSupportFragmentManager().beginTransaction()
-            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out)
-            .remove(oldFragment)
-            .replace(containerId, newFragment, TAG)
-            .addToBackStack(TAG)
-            .commit();
-    }
-
     public void setUpAppBarBackButton(boolean visible) {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(visible);
