@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/recipe_steps_container"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/player_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"/>
+
+    <TextView
+            android:id="@+id/recipe_step_landscape_no_video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="Roboto-Condensed"
+            android:textSize="@dimen/recipe_list_item_text_size"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:visibility="gone"/>
+
+</LinearLayout>

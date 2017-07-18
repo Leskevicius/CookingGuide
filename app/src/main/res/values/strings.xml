@@ -7,4 +7,5 @@
 
     <string name="recipe_step_previous">PREVIOUS</string>
     <string name="recipe_step_next">NEXT</string>
+    <string name="recipe_step_no_video">This step has no video</string>
 </resources>

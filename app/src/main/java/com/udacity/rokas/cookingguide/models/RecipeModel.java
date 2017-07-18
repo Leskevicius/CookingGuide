@@ -3,6 +3,7 @@ package com.udacity.rokas.cookingguide.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,8 +18,8 @@ public class RecipeModel implements Parcelable {
     private String name;
     private int servings;
     private String image;
-    private List<IngredientModel> ingredientList;
-    private List<StepModel> stepList;
+    private List<IngredientModel> ingredientList = new ArrayList<>();
+    private List<StepModel> stepList = new ArrayList<>();
 
     public RecipeModel() {}
 

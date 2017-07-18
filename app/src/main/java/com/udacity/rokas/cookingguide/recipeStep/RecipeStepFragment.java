@@ -16,16 +16,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.udacity.rokas.cookingguide.R;
-import com.udacity.rokas.cookingguide.RecipeListActivity;
+import com.udacity.rokas.cookingguide.RecipeActivity;
 import com.udacity.rokas.cookingguide.RecipeListFragment;
 import com.udacity.rokas.cookingguide.models.RecipeModel;
 import com.udacity.rokas.cookingguide.models.StepModel;
@@ -45,20 +45,34 @@ public class RecipeStepFragment extends Fragment {
     @BindView(R.id.player_view)
     SimpleExoPlayerView playerView;
 
+    // These are nullable so I allow for ButterKnife to work when I don't actually need these elements (landscape)
+    @Nullable
     @BindView(R.id.recipe_step_details)
     TextView stepDetailsView;
 
+    @Nullable
     @BindView(R.id.recipe_step_previous)
     Button previousButton;
 
+    @Nullable
     @BindView(R.id.recipe_step_next)
     Button nextButton;
+
+    @Nullable
+    @BindView(R.id.recipe_step_button_container)
+    CardView buttonContainer;
+
+    @Nullable
+    @BindView(R.id.recipe_step_landscape_no_video)
+    TextView noVideoText;
 
     private SimpleExoPlayer player;
 
     private StepModel step;
 
     private RecipeModel recipe;
+
+    private boolean isTablet;
 
     public static RecipeStepFragment newInstance(Bundle bundle) {
         RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
@@ -69,8 +83,9 @@ public class RecipeStepFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.recipe_steps_fragment, container, false);
-        ButterKnife.bind(this, view);
+        View view;
+
+        isTablet = getResources().getBoolean(R.bool.isTablet);
 
         Bundle bundle = getArguments();
 
@@ -88,22 +103,43 @@ public class RecipeStepFragment extends Fragment {
         }
 
         // in landscape mode.
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && !isTablet) {
+            view = inflater.inflate(R.layout.recipe_steps_fragment_landscape, container, false);
+            ButterKnife.bind(this, view);
+
             playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        }
 
-        if (step != null) {
-            setAppBarTitle(com.udacity.rokas.cookingguide.utilities.TextUtils.getStepTitle(step));
-            stepDetailsView.setText(step.getDescription());
+            if (TextUtils.isEmpty(step.getVideoURL())) {
+                noVideoText.setText(getString(R.string.recipe_step_no_video));
+                noVideoText.setVisibility(View.VISIBLE);
+                playerView.setVisibility(View.GONE);
+            } else {
+                initializePlayer();
+            }
+
+            showStep();
+
+        } else {
+            view = inflater.inflate(R.layout.recipe_steps_fragment, container, false);
+            ButterKnife.bind(this, view);
+
+            if (step != null) {
+                stepDetailsView.setText(step.getDescription());
+                // set up the buttons
+                setupButtons();
+            }
+
             initializePlayer();
 
-            // set up the buttons
-            setupButtons();
+            if (!isTablet) {
+                setAppBarTitle(com.udacity.rokas.cookingguide.utilities.TextUtils.getStepTitle(step));
+                showStep();
+            }
         }
 
         return view;
@@ -126,7 +162,7 @@ public class RecipeStepFragment extends Fragment {
     }
 
     private void setupButtons() {
-        if (step.getId() >= recipe.getIngredientList().size()) {
+        if (step.getId() >= recipe.getStepList().size() - 1) {
             nextButton.setEnabled(false);
         } else if (step.getId() <= 0) {
             previousButton.setEnabled(false);
@@ -166,16 +202,14 @@ public class RecipeStepFragment extends Fragment {
     }
 
     private void setAppBarTitle(String title) {
-        if (getActivity() instanceof RecipeListActivity) {
-            ((RecipeListActivity) getActivity()).setAppBarTitle(title);
-            ((RecipeListActivity) getActivity()).setUpAppBarBackButton(true);
+        if (getActivity() instanceof RecipeActivity) {
+            ((RecipeActivity) getActivity()).setAppBarTitle(title);
         }
     }
 
     private void replaceFragment(Fragment fragment) {
-        if (getActivity() instanceof RecipeListActivity) {
-            ((RecipeListActivity) getActivity()).replaceFragment(fragment, R.id.recipe_fragment_container, RecipeStepFragment.TAG, this);
-//            ((RecipeListActivity) getActivity()).addFragment(fragment, R.id.recipe_fragment_container, RecipeStepFragment.TAG, false);
+        if (getActivity() instanceof RecipeActivity) {
+            ((RecipeActivity) getActivity()).replaceFragment(fragment, R.id.recipe_step_fragment_container, RecipeStepFragment.TAG, this);
         }
     }
 
@@ -184,6 +218,12 @@ public class RecipeStepFragment extends Fragment {
         bundle.putParcelable(RecipeDetailsFragment.STEP, recipe.getStepList().get(step.getId() + offset));
         bundle.putParcelable(RecipeListFragment.RECIPE, recipe);
         return bundle;
+    }
+
+    private void showStep() {
+        if (getActivity() instanceof RecipeActivity) {
+            ((RecipeActivity) getActivity()).showStep();
+        }
     }
 
     @Override
