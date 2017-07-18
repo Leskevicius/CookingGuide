@@ -3,13 +3,10 @@ package com.udacity.rokas.cookingguide.recipeDetails;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.udacity.rokas.cookingguide.R;
@@ -22,7 +19,6 @@ import com.udacity.rokas.cookingguide.models.StepModel;
 import com.udacity.rokas.cookingguide.recipeStep.RecipeStepFragment;
 import com.udacity.rokas.cookingguide.utilities.TextUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -79,8 +75,6 @@ public class RecipeDetailsFragment extends Fragment {
             setAppBarTitle(recipe.getName());
 
             // set up the recycler view
-//            RecipeDetailsAdapter adapter = new RecipeDetailsAdapter(new ArrayList<>(recipe.getStepList()), getContext(), this);
-//            stepsListView.setAdapter(adapter);
             for (int i = 0; i < recipe.getStepList().size(); i++) {
                 LayoutInflater layoutInflater = LayoutInflater.from(getContext());
                 View stepItem = layoutInflater.inflate(R.layout.recipe_steps_item, container, false);

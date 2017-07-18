@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 
 import com.udacity.rokas.cookingguide.models.RecipeModel;
 import com.udacity.rokas.cookingguide.providers.RecipeProvider;
-import com.udacity.rokas.cookingguide.recipeDetails.RecipeDetailsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,15 +91,6 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
 
         return view;
     }
-//
-//    @Override
-//    public void onHiddenChanged(boolean hidden) {
-//        super.onHiddenChanged(hidden);
-//        if (!hidden) {
-//            onClickEnabled = true;
-//            setAppBarTitle(getString(R.string.recipe_list_app_bar_title));
-//        }
-//    }
 
     @Override
     public void onComplete(List<RecipeModel> recipes) {

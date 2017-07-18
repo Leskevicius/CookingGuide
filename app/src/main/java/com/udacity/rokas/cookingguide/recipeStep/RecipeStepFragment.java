@@ -22,13 +22,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.udacity.rokas.cookingguide.R;
 import com.udacity.rokas.cookingguide.RecipeActivity;
-import com.udacity.rokas.cookingguide.RecipeListActivity;
 import com.udacity.rokas.cookingguide.RecipeListFragment;
 import com.udacity.rokas.cookingguide.models.RecipeModel;
 import com.udacity.rokas.cookingguide.models.StepModel;
@@ -36,7 +33,6 @@ import com.udacity.rokas.cookingguide.recipeDetails.RecipeDetailsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Optional;
 
 /**
  * Created by rokas on 7/3/17.
