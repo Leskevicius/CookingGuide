@@ -3,14 +3,14 @@ package com.udacity.rokas.cookingguide.recipeDetails;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.udacity.rokas.cookingguide.R;
+import com.udacity.rokas.cookingguide.RecipeActivity;
 import com.udacity.rokas.cookingguide.RecipeListActivity;
 import com.udacity.rokas.cookingguide.RecipeListFragment;
 import com.udacity.rokas.cookingguide.models.IngredientModel;
@@ -28,14 +28,17 @@ import butterknife.ButterKnife;
  * Created by rokas on 7/1/17.
  */
 
-public class RecipeDetailsFragment extends Fragment implements RecipeDetailsStepsAdapter.RecipeStepOnClickListener {
+public class RecipeDetailsFragment extends Fragment {
 
     public static final String TAG = RecipeDetailsFragment.class.getCanonicalName();
 
     public static final String STEP = "step";
 
-    @BindView(R.id.recipe_details_ingredients) TextView ingredientsView;
-    @BindView(R.id.recipe_details_steps_recycler_view) RecyclerView stepsRecyclerView;
+    @BindView(R.id.recipe_details_ingredients)
+    TextView ingredientsView;
+
+    @BindView(R.id.recipe_details_steps_list)
+    LinearLayout stepsList;
 
     private RecipeModel recipe;
 
@@ -66,16 +69,33 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsStep
                 sb.append(TextUtils.ingredientListToString(ingredients));
 
             ingredientsView.setText(sb.toString());
+            ingredientsView.setFocusableInTouchMode(true);
 
             // set up app bar
             setAppBarTitle(recipe.getName());
 
             // set up the recycler view
-            RecipeDetailsStepsAdapter adapter = new RecipeDetailsStepsAdapter(this, recipe.getStepList());
-            stepsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-            stepsRecyclerView.setAdapter(adapter);
-        }
+            for (int i = 0; i < recipe.getStepList().size(); i++) {
+                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+                View stepItem = layoutInflater.inflate(R.layout.recipe_steps_item, container, false);
+                TextView stepDescriptionView = (TextView) stepItem.findViewById(R.id.recipe_details_steps_description);
+                stepDescriptionView.setText(recipe.getStepList().get(i).getShortDescription());
+                if (i == 0) {
+                    View horizonalRule = stepItem.findViewById(R.id.recipe_details_steps_divider);
+                    horizonalRule.setVisibility(View.GONE);
+                }
 
+                final int position = i;
+                stepItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onStepClick(recipe.getStepList().get(position));
+                    }
+                });
+
+                stepsList.addView(stepItem);
+            }
+        }
         return view;
     }
 
@@ -102,17 +122,16 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsStep
         }
     }
 
-    @Override
-    public void onClick(StepModel step) {
+    public void onStepClick(StepModel step) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(RecipeDetailsFragment.STEP, step);
         bundle.putParcelable(RecipeListFragment.RECIPE, recipe);
         RecipeStepFragment fragment = RecipeStepFragment.newInstance(bundle);
-        if (getActivity() instanceof RecipeListActivity) {
-            ((RecipeListActivity) getActivity()).addFragment(fragment, R.id.recipe_fragment_container,
+        if (getActivity() instanceof RecipeActivity) {
+            ((RecipeActivity) getActivity()).addFragment(fragment, R.id.recipe_step_fragment_container,
                 RecipeStepFragment.TAG);
+
         }
+
     }
-
-
 }
