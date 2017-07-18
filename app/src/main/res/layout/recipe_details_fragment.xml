@@ -3,14 +3,13 @@
 <android.support.v4.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:isScrollContainer="true">
+        android:layout_height="match_parent">
     <LinearLayout
 
             android:id="@+id/recipe_details_fragment"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/recipe_fragment_left_margin"
             android:layout_marginEnd="@dimen/recipe_fragment_right_margin"
             android:layout_marginTop="@dimen/recipe_fragment_top_margin"

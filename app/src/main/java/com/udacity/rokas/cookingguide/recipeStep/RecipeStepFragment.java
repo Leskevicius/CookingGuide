@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.udacity.rokas.cookingguide.R;
+import com.udacity.rokas.cookingguide.RecipeActivity;
 import com.udacity.rokas.cookingguide.RecipeListActivity;
 import com.udacity.rokas.cookingguide.RecipeListFragment;
 import com.udacity.rokas.cookingguide.models.RecipeModel;
@@ -60,6 +61,9 @@ public class RecipeStepFragment extends Fragment {
 
     @Nullable @BindView(R.id.recipe_step_button_container)
     CardView buttonContainer;
+
+    @Nullable @BindView(R.id.recipe_step_landscape_no_video)
+    TextView noVideoText;
 
     private SimpleExoPlayer player;
 
@@ -104,6 +108,15 @@ public class RecipeStepFragment extends Fragment {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+            if (TextUtils.isEmpty(step.getVideoURL())) {
+                noVideoText.setText(getString(R.string.recipe_step_no_video));
+                noVideoText.setVisibility(View.VISIBLE);
+                playerView.setVisibility(View.GONE);
+            } else {
+                initializePlayer();
+            }
+
         } else {
             view = inflater.inflate(R.layout.recipe_steps_fragment, container, false);
             ButterKnife.bind(this, view);
@@ -114,8 +127,11 @@ public class RecipeStepFragment extends Fragment {
                 // set up the buttons
                 setupButtons();
             }
+
+            initializePlayer();
         }
-        initializePlayer();
+
+        showStep();
 
         return view;
     }
@@ -177,16 +193,14 @@ public class RecipeStepFragment extends Fragment {
     }
 
     private void setAppBarTitle(String title) {
-        if (getActivity() instanceof RecipeListActivity) {
-            ((RecipeListActivity) getActivity()).setAppBarTitle(title);
-            ((RecipeListActivity) getActivity()).setUpAppBarBackButton(true);
+        if (getActivity() instanceof RecipeActivity) {
+            ((RecipeActivity) getActivity()).setAppBarTitle(title);
         }
     }
 
     private void replaceFragment(Fragment fragment) {
-        if (getActivity() instanceof RecipeListActivity) {
-            ((RecipeListActivity) getActivity()).replaceFragment(fragment, R.id.recipe_fragment_container, RecipeStepFragment.TAG, this);
-//            ((RecipeListActivity) getActivity()).addFragment(fragment, R.id.recipe_fragment_container, RecipeStepFragment.TAG, false);
+        if (getActivity() instanceof RecipeActivity) {
+            ((RecipeActivity) getActivity()).replaceFragment(fragment, R.id.recipe_step_fragment_container, RecipeStepFragment.TAG, this);
         }
     }
 
@@ -195,6 +209,12 @@ public class RecipeStepFragment extends Fragment {
         bundle.putParcelable(RecipeDetailsFragment.STEP, recipe.getStepList().get(step.getId() + offset));
         bundle.putParcelable(RecipeListFragment.RECIPE, recipe);
         return bundle;
+    }
+
+    private void showStep() {
+        if (getActivity() instanceof RecipeActivity) {
+            ((RecipeActivity) getActivity()).showStep();
+        }
     }
 
     @Override

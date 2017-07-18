@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.udacity.rokas.cookingguide.R;
+import com.udacity.rokas.cookingguide.RecipeActivity;
 import com.udacity.rokas.cookingguide.RecipeListActivity;
 import com.udacity.rokas.cookingguide.RecipeListFragment;
 import com.udacity.rokas.cookingguide.models.IngredientModel;
@@ -66,6 +67,7 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsStep
                 sb.append(TextUtils.ingredientListToString(ingredients));
 
             ingredientsView.setText(sb.toString());
+            ingredientsView.setFocusableInTouchMode(true);
 
             // set up app bar
             setAppBarTitle(recipe.getName());
@@ -74,7 +76,10 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsStep
             RecipeDetailsStepsAdapter adapter = new RecipeDetailsStepsAdapter(this, recipe.getStepList());
             stepsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
             stepsRecyclerView.setAdapter(adapter);
+            stepsRecyclerView.setNestedScrollingEnabled(false);
         }
+
+        showDetails();
 
         return view;
     }
@@ -108,11 +113,17 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsStep
         bundle.putParcelable(RecipeDetailsFragment.STEP, step);
         bundle.putParcelable(RecipeListFragment.RECIPE, recipe);
         RecipeStepFragment fragment = RecipeStepFragment.newInstance(bundle);
-        if (getActivity() instanceof RecipeListActivity) {
-            ((RecipeListActivity) getActivity()).addFragment(fragment, R.id.recipe_fragment_container,
+        if (getActivity() instanceof RecipeActivity) {
+            ((RecipeActivity) getActivity()).addFragment(fragment, R.id.recipe_step_fragment_container,
                 RecipeStepFragment.TAG);
+
         }
+
     }
 
-
+    private void showDetails() {
+        if (getActivity() instanceof RecipeActivity) {
+            ((RecipeActivity) getActivity()).showDetails();
+        }
+    }
 }

@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.udacity.rokas.cookingguide.recipeDetails.RecipeDetailsFragment;
 
@@ -19,6 +20,8 @@ public class RecipeListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
 
+        setAppBarTitle(getString(R.string.recipe_list_app_bar_title));
+
         // start up the recipe list fragment
         if (savedInstanceState == null) {
             RecipeListFragment fragment = RecipeListFragment.newInstance(new Bundle());
@@ -27,6 +30,8 @@ public class RecipeListActivity extends AppCompatActivity {
                 .commit();
         }
 
+        String deviceType = getResources().getBoolean(R.bool.isTablet) ? "Tablet" : "Phone";
+        Toast.makeText(this, deviceType, Toast.LENGTH_LONG).show();
     }
 
     public void setAppBarTitle(String title) {

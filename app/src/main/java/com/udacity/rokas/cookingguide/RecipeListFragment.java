@@ -1,5 +1,6 @@
 package com.udacity.rokas.cookingguide;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -78,10 +79,6 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
         recipeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recipeRecyclerView.setAdapter(recipeListAdapter);
 
-        // set up appbar
-        setAppBarTitle(getString(R.string.recipe_list_app_bar_title));
-
-
         return view;
     }
 //
@@ -119,20 +116,10 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
         }
     }
 
-    private void setAppBarTitle(String title) {
-        if (getActivity() instanceof RecipeListActivity) {
-            ((RecipeListActivity) getActivity()).setAppBarTitle(title);
-        }
-    }
-
     @Override
     public void onClick(RecipeModel recipe) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(RECIPE, recipe);
-        RecipeDetailsFragment fragment = RecipeDetailsFragment.newInstance(bundle);
-        if (getActivity() instanceof RecipeListActivity) {
-            ((RecipeListActivity) getActivity()).addFragment(fragment, R.id.recipe_fragment_container,
-                RecipeDetailsFragment.TAG);
-        }
+        Intent intent = new Intent(getContext(), RecipeActivity.class);
+        intent.putExtra(RECIPE, recipe);
+        startActivity(intent);
     }
 }
