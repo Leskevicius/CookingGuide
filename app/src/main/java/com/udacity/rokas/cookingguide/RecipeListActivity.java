@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.udacity.rokas.cookingguide.recipeDetails.RecipeDetailsFragment;
+// TODO: handle images that don't exist
+// TODO: ESPRESSO TESTS!
+// TODO: WIDGET
 
 public class RecipeListActivity extends AppCompatActivity {
 
