@@ -5,7 +5,9 @@
     <string name="recipe_details_steps_title">Steps</string>
     <string name="recipe_step_title">Instructions</string>
 
-    <string name="recipe_step_previous">PREVIOUS</string>
-    <string name="recipe_step_next">NEXT</string>
+    <string name="recipe_step_previous">&lt;</string>
+    <string name="recipe_step_next">&gt;</string>
     <string name="recipe_step_no_video">This step has no video</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

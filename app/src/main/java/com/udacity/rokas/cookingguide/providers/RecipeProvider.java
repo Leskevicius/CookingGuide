@@ -23,6 +23,8 @@ public class RecipeProvider {
 
     private static AsyncTask mBackgroundTask;
     private static RecipeProviderListener currentListener;
+
+    private static List<RecipeModel> recipes;
     // synchronized so we do not have two threads in this part of code. Would create a problem of finding who to return the results to.
     // there is a ton of improvement here, but I will not spend time on this as this will not be a huge project/reusability of this
     // provider.
@@ -34,11 +36,12 @@ public class RecipeProvider {
      */
     public static synchronized void requestRecipes(final RecipeProviderListener listener) {
         currentListener = listener;
+        if (recipes != null) {
+            onComplete(recipes);
+            return;
+        }
         // start the job off of the main UI thread.
         mBackgroundTask = new AsyncTask() {
-
-            private List<RecipeModel> recipes;
-
             @Override
             protected Object doInBackground(Object[] params) {
                 String response = "[\n" +
@@ -593,7 +596,7 @@ public class RecipeProvider {
         mBackgroundTask.execute();
     }
 
-    private static void onComplete(List<RecipeModel> recipes) {
+    protected static void onComplete(List<RecipeModel> recipes) {
         currentListener.onComplete(recipes);
     }
 

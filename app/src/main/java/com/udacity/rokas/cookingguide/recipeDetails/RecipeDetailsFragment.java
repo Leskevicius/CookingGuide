@@ -81,8 +81,8 @@ public class RecipeDetailsFragment extends Fragment {
                 TextView stepDescriptionView = (TextView) stepItem.findViewById(R.id.recipe_details_steps_description);
                 stepDescriptionView.setText(recipe.getStepList().get(i).getShortDescription());
                 if (i == 0) {
-                    View horizonalRule = stepItem.findViewById(R.id.recipe_details_steps_divider);
-                    horizonalRule.setVisibility(View.GONE);
+                    View horizontalRule = stepItem.findViewById(R.id.recipe_details_steps_divider);
+                    horizontalRule.setVisibility(View.GONE);
                 }
 
                 final int position = i;
