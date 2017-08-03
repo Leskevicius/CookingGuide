@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.Context;
 
 import com.udacity.rokas.cookingguide.R;
-import com.udacity.rokas.cookingguide.RecipeListAdapter;
 import com.udacity.rokas.cookingguide.models.RecipeModel;
 import com.udacity.rokas.cookingguide.providers.RecipeProvider;
 
@@ -22,53 +21,31 @@ import java.util.List;
  */
 public class RecipeWidgetService extends IntentService implements RecipeProvider.RecipeProviderListener {
 
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_NEXT = "com.udacity.rokas.cookingguide.widget.action.NEXT_RECIPE";
 
     private static final String ACTION_PREVIOUS = "com.udacity.rokas.cookingguide.widget.action.PREVIOUS_RECIPE";
 
     private static final String ACTION_ON_BOOT = "com.udacity.rokas.cookingguide.widget.action.ON_BOOt";
 
-    // TODO: Rename parameters
-    private static final String EXTRA_PARAM1 = "com.udacity.rokas.cookingguide.widget.extra.PARAM1";
-
-    private static final String EXTRA_PARAM2 = "com.udacity.rokas.cookingguide.widget.extra.PARAM2";
-
-    private static List<RecipeModel> recipes;
+    private List<RecipeModel> recipes;
 
     public RecipeWidgetService() {
         super("RecipeWidgetService");
     }
 
-    /**
-     * Starts this service to perform action Foo with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionNextRecipe(Context context, String param1, String param2) {
+
+    public static Intent getActionNextRecipeIntent(Context context, int currentRecipe) {
         Intent intent = new Intent(context, RecipeWidgetService.class);
         intent.setAction(ACTION_NEXT);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
+        intent.putExtra(RecipeWidget.CURRENT_RECIPE, currentRecipe);
+        return intent;
     }
 
-    /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionPreviousRecipe(Context context, String param1, String param2) {
+    public static Intent getActionPreviousRecipeIntent(Context context, int currentRecipe) {
         Intent intent = new Intent(context, RecipeWidgetService.class);
         intent.setAction(ACTION_PREVIOUS);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
+        intent.putExtra(RecipeWidget.CURRENT_RECIPE, currentRecipe);
+        return intent;
     }
 
     public static void startActionOnBoot(Context context) {
@@ -82,13 +59,11 @@ public class RecipeWidgetService extends IntentService implements RecipeProvider
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_NEXT.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionNextRecipe(param1, param2);
+                final int currentRecipe = intent.getIntExtra(RecipeWidget.CURRENT_RECIPE, 0);
+                handleActionNextRecipe(currentRecipe);
             } else if (ACTION_PREVIOUS.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionPreviousrecipe(param1, param2);
+                final int currentRecipe = intent.getIntExtra(RecipeWidget.CURRENT_RECIPE, 0);
+                handleActionPreviousRecipe(currentRecipe);
             } else if (ACTION_ON_BOOT.equals(action)) {
                 RecipeProvider.requestRecipes(this);
             }
@@ -99,30 +74,40 @@ public class RecipeWidgetService extends IntentService implements RecipeProvider
      * Handle action Foo in the provided background thread with the provided
      * parameters.
      */
-    private void handleActionNextRecipe(String param1, String param2) {
-        // TODO: Handle action Foo
-        throw new UnsupportedOperationException("Not yet implemented");
+    private void handleActionNextRecipe(int currentRecipe) {
+        TerribleSolution.setCurrentRecipe(currentRecipe < 3 ? ++currentRecipe : currentRecipe);
+        handleActionTraversal();
     }
 
     /**
      * Handle action Baz in the provided background thread with the provided
      * parameters.
      */
-    private void handleActionPreviousrecipe(String param1, String param2) {
-        // TODO: Handle action Baz
-        throw new UnsupportedOperationException("Not yet implemented");
+    private void handleActionPreviousRecipe(int currentRecipe) {
+        TerribleSolution.setCurrentRecipe(currentRecipe == 0 ? 0 : --currentRecipe);
+        handleActionTraversal();
     }
 
     private void handleActionOnBoot() {
-        if (recipes != null && recipes.get(0) != null) {
+        if (recipes != null) {
 
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeWidget.class));
             //Trigger data update to handle the GridView widgets and force a data refresh
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.recipe_widget_container);
 
-            RecipeWidget.updateAllWidgets(this, appWidgetManager, appWidgetIds, recipes.get(0));
+            RecipeWidget.setRecipes(recipes);
+            RecipeWidget.updateAllWidgets(this, appWidgetManager, appWidgetIds);
         }
+    }
+
+    private void handleActionTraversal() {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeWidget.class));
+        //Trigger data update to handle the GridView widgets and force a data refresh
+
+        RecipeWidget.updateAllWidgets(this, appWidgetManager, appWidgetIds);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.recipe_widget_container);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.recipe_widget_ingredients_list);
     }
 
     @Override

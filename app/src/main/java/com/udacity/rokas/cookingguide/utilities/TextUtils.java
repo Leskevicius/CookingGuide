@@ -33,12 +33,18 @@ public class TextUtils {
 
     private static String formatIngredient(String ingredientName, int quantity, String measure) {
         StringBuilder sb = new StringBuilder();
-        sb.append(quantity);
-        sb.append(" ");
-        sb.append(measure);
+        sb.append(formatIngredientAmount(quantity, measure));
         sb.append(" of ");
         sb.append(ingredientName);
         sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
+        return sb.toString();
+    }
+
+    public static String formatIngredientAmount(int quantity, String measure) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(quantity);
+        sb.append(" ");
+        sb.append(measure);
         return sb.toString();
     }
 }

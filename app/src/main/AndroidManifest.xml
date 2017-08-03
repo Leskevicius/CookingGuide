@@ -35,6 +35,10 @@
                 android:name=".widget.RecipeWidgetService"
                 android:exported="false">
         </service>
+
+        <service
+                android:name=".widget.WidgetService"
+                android:permission="android.permission.BIND_REMOTEVIEWS"/>
     </application>
 
 </manifest>
