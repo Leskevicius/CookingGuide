@@ -75,11 +75,11 @@ public class RecipeListFragment extends Fragment implements RecipeProvider.Recip
         }
         if (recipeList == null) {
             showProgressBar();
-            recipeListAdapter = new RecipeListAdapter(this);
+            recipeListAdapter = new RecipeListAdapter(getContext(), this);
             RecipeProvider.requestRecipes(this);
 
         } else {
-            recipeListAdapter = new RecipeListAdapter(this, recipeList);
+            recipeListAdapter = new RecipeListAdapter(getContext(), this, recipeList);
         }
         if (isTablet) {
             recipeRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));

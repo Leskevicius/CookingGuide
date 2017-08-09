@@ -2,11 +2,14 @@ package com.udacity.rokas.cookingguide;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.udacity.rokas.cookingguide.models.RecipeModel;
 
 import java.util.List;
@@ -22,13 +25,15 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     private List<RecipeModel> recipes;
     private RecipeOnClickListener listener;
+    private Context context;
 
-    public RecipeListAdapter(RecipeOnClickListener listener) {
+    public RecipeListAdapter(Context context, RecipeOnClickListener listener) {
         this.listener = listener;
+        this.context = context;
     }
 
-    public RecipeListAdapter(RecipeOnClickListener listener, List<RecipeModel> recipes) {
-        this(listener);
+    public RecipeListAdapter(Context context, RecipeOnClickListener listener, List<RecipeModel> recipes) {
+        this(context, listener);
         this.recipes = recipes;
     }
 
@@ -46,8 +51,14 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     public void onBindViewHolder(RecipeListAdapterViewHolder holder, int position) {
         String title = recipes.get(position).getName();
         String servings = "Servings: " + Integer.toString(recipes.get(position).getServings());
+        String imageUrl = recipes.get(position).getImage();
         holder.mRecipeTitle.setText(title);
         holder.mRecipeDetail.setText(servings);
+        if (TextUtils.isEmpty(imageUrl)) {
+            holder.mImageView.setVisibility(View.GONE);
+        } else {
+            Glide.with(context).load(imageUrl).into(holder.mImageView);
+        }
     }
 
     @Override
@@ -60,6 +71,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
         @BindView(R.id.recipe_item_title) public TextView mRecipeTitle;
         @BindView(R.id.recipe_item_detail) public TextView mRecipeDetail;
+        @BindView(R.id.recipe_item_image) public ImageView mImageView;
 
         public RecipeListAdapterViewHolder(View itemView) {
             super(itemView);
