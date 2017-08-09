@@ -29,9 +29,6 @@ public class RecipeListActivity extends AppCompatActivity {
                 .add(R.id.recipe_fragment_container, fragment)
                 .commit();
         }
-
-        String deviceType = getResources().getBoolean(R.bool.isTablet) ? "Tablet" : "Phone";
-        Toast.makeText(this, deviceType, Toast.LENGTH_LONG).show();
     }
 
     public void setAppBarTitle(String title) {

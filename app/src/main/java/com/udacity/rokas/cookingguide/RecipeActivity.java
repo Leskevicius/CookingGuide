@@ -90,7 +90,6 @@ public class RecipeActivity extends AppCompatActivity {
         }
 
         String deviceType = getResources().getBoolean(R.bool.isTablet) ? "Tablet" : "Phone";
-        Toast.makeText(this, deviceType, Toast.LENGTH_LONG).show();
     }
 
     public void setAppBarTitle(String title) {

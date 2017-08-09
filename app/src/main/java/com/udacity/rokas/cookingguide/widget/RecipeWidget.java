@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RemoteViews;
 
 import com.udacity.rokas.cookingguide.R;
@@ -73,6 +75,7 @@ public class RecipeWidget extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.recipe_widget_next, nextPendingIntent);
 
         views.setTextViewText(R.id.recipe_widget_recipe_name, recipes.get(currentRecipe).getName());
+        views.setViewVisibility(R.id.recipe_widget_loading, View.GONE);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.recipe_widget_container);
