@@ -22,8 +22,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.udacity.rokas.cookingguide.R;
 import com.udacity.rokas.cookingguide.RecipeActivity;
 import com.udacity.rokas.cookingguide.RecipeListFragment;
@@ -65,6 +67,10 @@ public class RecipeStepFragment extends Fragment {
     @Nullable
     @BindView(R.id.recipe_step_landscape_no_video)
     TextView noVideoText;
+
+    @Nullable
+    @BindView(R.id.recipe_steps_image)
+    ImageView recipeImage;
 
     private SimpleExoPlayer player;
 
@@ -132,6 +138,10 @@ public class RecipeStepFragment extends Fragment {
                 stepDetailsView.setText(step.getDescription());
                 // set up the buttons
                 setupButtons();
+            }
+
+            if (recipe != null) {
+                Glide.with(getContext()).load(recipe.getImage()).into(recipeImage);
             }
 
             initializePlayer();
