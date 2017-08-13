@@ -10,4 +10,5 @@
     <string name="recipe_step_no_video">This step has no video</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="recipe_list_error_message">Could now load the recipes. Please try again later.</string>
 </resources>
