@@ -140,7 +140,7 @@ public class RecipeStepFragment extends Fragment {
                 setupButtons();
             }
 
-            if (recipe != null) {
+            if (recipe != null && !TextUtils.isEmpty(recipe.getImage())) {
                 Glide.with(getContext()).load(recipe.getImage()).into(recipeImage);
             }
 
@@ -243,5 +243,11 @@ public class RecipeStepFragment extends Fragment {
             player.release();
             player = null;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initializePlayer();
     }
 }
