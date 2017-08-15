@@ -141,7 +141,7 @@ public class RecipeStepFragment extends Fragment {
             }
 
             if (recipe != null && !TextUtils.isEmpty(recipe.getImage())) {
-                Glide.with(getContext()).load(recipe.getImage()).into(recipeImage);
+                Glide.with(getContext()).load(step.getThumbnailURL()).into(recipeImage);
             }
 
             initializePlayer();
@@ -156,18 +156,20 @@ public class RecipeStepFragment extends Fragment {
     }
 
     private void initializePlayer() {
-        if (!TextUtils.isEmpty(step.getVideoURL())) {
-            player = ExoPlayerFactory.newSimpleInstance(
-                new DefaultRenderersFactory(getContext()),
-                new DefaultTrackSelector(),
-                new DefaultLoadControl());
+        if (player == null) {
+            if (!TextUtils.isEmpty(step.getVideoURL())) {
+                player = ExoPlayerFactory.newSimpleInstance(
+                    new DefaultRenderersFactory(getContext()),
+                    new DefaultTrackSelector(),
+                    new DefaultLoadControl());
 
-            playerView.setPlayer(player);
-            player.setPlayWhenReady(true);
-            Uri mediaUri = Uri.parse(step.getVideoURL());
-            player.prepare(buildMediaSource(mediaUri), true, false);
-        } else {
-            playerView.setVisibility(View.GONE);
+                playerView.setPlayer(player);
+                player.setPlayWhenReady(true);
+                Uri mediaUri = Uri.parse(step.getVideoURL());
+                player.prepare(buildMediaSource(mediaUri), true, false);
+            } else {
+                playerView.setVisibility(View.GONE);
+            }
         }
     }
 
