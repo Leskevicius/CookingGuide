@@ -18,6 +18,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,8 @@ import butterknife.ButterKnife;
 public class RecipeStepFragment extends Fragment {
 
     public static final String TAG = RecipeStepFragment.class.getCanonicalName();
+
+    private static final String SEEK_POSITION = "seekPosition";
 
     @BindView(R.id.player_view)
     SimpleExoPlayerView playerView;
@@ -73,6 +76,8 @@ public class RecipeStepFragment extends Fragment {
     ImageView recipeImage;
 
     private SimpleExoPlayer player;
+
+    private long seekPosition = -1;
 
     private StepModel step;
 
@@ -108,6 +113,10 @@ public class RecipeStepFragment extends Fragment {
             // do something
         }
 
+        if (savedInstanceState != null && savedInstanceState.containsKey(SEEK_POSITION)) {
+            seekPosition = savedInstanceState.getLong(SEEK_POSITION);
+        }
+
         // in landscape mode.
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && !isTablet) {
             view = inflater.inflate(R.layout.recipe_steps_fragment_landscape, container, false);
@@ -140,7 +149,7 @@ public class RecipeStepFragment extends Fragment {
                 setupButtons();
             }
 
-            if (recipe != null && !TextUtils.isEmpty(recipe.getImage())) {
+            if (recipe != null && !TextUtils.isEmpty(step.getThumbnailURL())) {
                 Glide.with(getContext()).load(step.getThumbnailURL()).into(recipeImage);
             }
 
@@ -166,6 +175,9 @@ public class RecipeStepFragment extends Fragment {
                 playerView.setPlayer(player);
                 player.setPlayWhenReady(true);
                 Uri mediaUri = Uri.parse(step.getVideoURL());
+                if (seekPosition != -1) {
+                    player.seekTo(seekPosition);
+                }
                 player.prepare(buildMediaSource(mediaUri), true, false);
             } else {
                 playerView.setVisibility(View.GONE);
@@ -205,7 +217,10 @@ public class RecipeStepFragment extends Fragment {
             outState.putParcelable(RecipeDetailsFragment.STEP, step);
             outState.putParcelable(RecipeListFragment.RECIPE, recipe);
         }
+
+        outState.putLong(SEEK_POSITION, seekPosition);
     }
+
 
     private MediaSource buildMediaSource(Uri uri) {
         return new ExtractorMediaSource(uri,
@@ -240,8 +255,21 @@ public class RecipeStepFragment extends Fragment {
 
     @Override
     public void onStop() {
+        Log.v("Rokas: ", "stop");
         super.onStop();
         if (player != null) {
+            seekPosition = player.getCurrentPosition();
+            player.release();
+            player = null;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        Log.v("Rokas: ", "pause");
+        super.onPause();
+        if (player != null) {
+            seekPosition = player.getCurrentPosition();
             player.release();
             player = null;
         }
@@ -249,6 +277,7 @@ public class RecipeStepFragment extends Fragment {
 
     @Override
     public void onResume() {
+        Log.v("Rokas: ", "resume");
         super.onResume();
         initializePlayer();
     }
